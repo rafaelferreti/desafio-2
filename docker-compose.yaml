@@ -4,7 +4,7 @@ services:
   app:
     image: rafaelferreti/desafio-2-node
     container_name: app
-    entrypoint: dockerize -wait tcp://database:3306 docker-entrypoint.sh
+    entrypoint: dockerize -wait tcp://database:3306 -timeout 300s docker-entrypoint.sh node index.js
     networks:
       - desafio-network
     volumes: 
@@ -32,6 +32,8 @@ services:
     build: ./nginx
     image: rafaelferreti/desafio-2-nginx
     container_name: nginx
+    entrypoint: dockerize -wait tcp://app:3000 -timeout 300s
+    command: [nginx, '-g', 'daemon off;']
     ports:
       - 8080:80
     networks:
